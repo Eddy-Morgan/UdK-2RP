@@ -40,15 +40,15 @@ class spatial_eclipsoid_Constraints:
         A32 = endefZdd.coeff(self.q2dd)
         A33 = endefZdd.coeff(self.q3dd)
 
-        self.A = sm.Matrix([[A11, A12, A13], [A21, A22, A23], [A31, A32, A33]])
+        A = sm.Matrix([[A11, A12, A13], [A21, A22, A23], [A31, A32, A33]])
 
         b1 = endefXdd - A11*self.q1dd - A12*self.q2dd - A13*self.q3dd
         b2 = endefYdd - A21*self.q1dd - A22*self.q2dd - A23*self.q3dd
         b3 = endefZdd - A31*self.q1dd - A32*self.q2dd - A33*self.q3dd
-        self.b = sm.Matrix([b1.simplify(),b2.simplify(),b3.simplify()])
+        b = sm.Matrix([b1.simplify(),b2.simplify(),b3.simplify()])
 
-        self.A_f=lambdify([t,self.l0,self.l1,self.l2, self.q1,self.q2,self.q3, self.q1d, self.q2d, self.q3d],self.A, "numpy")
-        self.b_f=lambdify([t,self.l0,self.l1,self.l2, self.q1,self.q2,self.q3, self.q1d, self.q2d, self.q3d],self.b, "numpy")
+        self.A_f=lambdify([t,self.l0,self.l1,self.l2, self.q1,self.q2,self.q3, self.q1d, self.q2d, self.q3d],A, "numpy")
+        self.b_f=lambdify([t,self.l0,self.l1,self.l2, self.q1,self.q2,self.q3, self.q1d, self.q2d, self.q3d],b, "numpy")
 
     def compute_A(self,s,t):
         q1v = s[0]
