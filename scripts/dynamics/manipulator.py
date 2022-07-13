@@ -64,7 +64,7 @@ class MDynamics:
         m32 = f3sim.coeff(q2dd)
         m33 = f3sim.coeff(q3dd)
 
-        self.M = sm.Matrix([[m11, m12, m13], [m21, m22, m23], [m31, m32 ,m33]])
+        M = sm.Matrix([[m11, m12, m13], [m21, m22, m23], [m31, m32 ,m33]])
 
     def compute_mass_matrix(self,pos):
         pass
