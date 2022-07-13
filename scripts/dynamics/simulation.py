@@ -25,11 +25,8 @@ def compute_constrained(A,b,M,Q):
 
     AM=np.dot(A,m_inv_sqrt)
     pinv_AM = np.linalg.pinv(AM)
-
     w = b - np.dot(A,np.dot(np.linalg.inv(M),Q))
-
     u = np.dot(pinv_AM, w)
-    
     return np.dot(m_inv_sqrt,u)
 
 def dSdt(t,s):
@@ -55,7 +52,7 @@ def dSdt(t,s):
 
 S_0 = [-13.5,0.75,50,-0.24,-100,-0.3] # Initial state of the system
 
-t = np.linspace(0,30,200)
+t = np.linspace(0,15,1000)
 sol = odeint(dSdt,y0=S_0, t=t, tfirst=True)
 q1 = sol.T[0]
 q1d = sol.T[1]
