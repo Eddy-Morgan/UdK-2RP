@@ -1,21 +1,21 @@
 import numpy as np
 from scipy.integrate import odeint, solve_ivp
 from mpl_toolkits.mplot3d import Axes3D
-from manipulator import MDynamics
-from constraints import spatial_eclipsoid_Constraints
+from manual_manipulator import MDynamics
+from manual_constraints import Constraints
 import matplotlib.pyplot as plt
 from scipy.linalg import sqrtm
     
 
 mdy = MDynamics()
-ct = spatial_eclipsoid_Constraints()
+ct = Constraints()
 print('templates generation complete')
 
 def is_pos_def(x):
     return np.all(np.linalg.eigvals(x) > 0)
 
-def compute_unconstrained(C,G):
-    return -C -G
+def compute_unconstrained(s,C,G):
+    return -np.dot(C,np.array([s[1],s[3],s[5]])) -G
 
 def compute_constrained(A,b,M,Q):
     #print('computing_constrained_force')
@@ -37,9 +37,8 @@ def dSdt(t,s):
     M = mdy.compute_mass_matrix(s)
     C = mdy.compute_coriolis_matrix(s)
     G = mdy.compute_gravity_matrix(s)
-    Q = compute_unconstrained(C,G)
-    A = ct.compute_A(s,t)
-    b = ct.compute_b(s,t)
+    Q = compute_unconstrained(s,C,G)
+    A,b = ct.compute_spatial_eclipsoid_A_b(s,t)
     Qc = compute_constrained(A,b,M,Q)
     q_dot_dot = np.dot(np.linalg.inv(M),Q)+Qc
 
